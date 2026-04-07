@@ -1,0 +1,12 @@
+[project]
+name = "schedule-bot"
+version = "0.1.0"
+description = "AI-powered schedule assistant using nanobot"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.uv]
+dev-dependencies = []
+
+[tool.uv.workspace]
+members = ["mcp/mcp_schedule", "nanobot"]

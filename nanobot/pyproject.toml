@@ -1,0 +1,16 @@
+[project]
+name = "schedule-bot-nanobot"
+version = "0.1.0"
+description = "Nanobot agent for schedule assistant"
+requires-python = ">=3.11"
+dependencies = [
+    "nanobot-ai>=0.1.0",
+    "mcp-schedule",
+]
+
+[tool.uv.sources]
+mcp-schedule = { workspace = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

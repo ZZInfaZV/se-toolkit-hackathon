@@ -1,0 +1,21 @@
+services:
+  schedule-bot:
+    build:
+      context: .
+      dockerfile: nanobot/Dockerfile
+    container_name: schedule-bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - LLM_API_KEY=${LLM_API_KEY}
+      - LLM_API_BASE=${LLM_API_BASE}
+      - SCHEDULE_DB_PATH=/app/data/schedule.db
+      - SCHEDULE_SHEET_URL=${SCHEDULE_SHEET_URL}
+    volumes:
+      - schedule-data:/app/data
+    ports:
+      - "8765:8765"
+
+volumes:
+  schedule-data:
