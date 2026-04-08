@@ -31,7 +31,7 @@ async def no_cache(request: Request, call_next):
 # ---------------------------------------------------------------------------
 SHEET_URL = os.environ.get(
     "SCHEDULE_SHEET_URL",
-    "https://docs.google.com/spreadsheets/d/1qetU56NwowMgHS4ZBSFDO5omeO6FHPYSIz6sde86yo/edit",
+    "https://docs.google.com/spreadsheets/d/1qetU56NwowMgHSD4ZBSFDO5omeO6FHPYSIz6sde86yo/edit?gid=733042979#gid=733042979",
 )
 DB_PATH = os.environ.get("SCHEDULE_DB_PATH", "data/schedule.db")
 
@@ -144,7 +144,9 @@ async def show_schedule(
         week_data = get_week(conn)
         # Flatten week into a list with day headers
         schedule = []
-        for day_key, day_label in DAYS:
+        for day_info in DAYS:
+            day_key = day_info["key"]
+            day_label = day_info["label"]
             lessons = week_data.get(day_key, [])
             if lessons:
                 schedule.append({"_day_header": day_label, "_is_header": True})
