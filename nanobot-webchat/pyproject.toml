@@ -1,0 +1,57 @@
+[project]
+name = "nanobot-webchat"
+version = "1.0.0"
+description = "WebSocket channel plugin for nanobot-ai — enables web clients to chat with the agent"
+requires-python = ">=3.11"
+dependencies = [
+    "nanobot-ai>=0.1.4",
+    "websockets>=15.0",
+]
+
+[build-system]
+requires = ["setuptools>=75.0"]
+build-backend = "setuptools.build_meta"
+
+[dependency-groups]
+dev = [
+    "aiogram>=3.20",
+    "poethepoet>=0.40.0",
+    "pydantic-settings>=2.0",
+    "pyright==1.1.408",
+]
+
+[tool.setuptools.packages.find]
+include = ["nanobot_webchat*"]
+
+[project.entry-points."nanobot.channels"]
+webchat = "nanobot_webchat:WebChatChannel"
+
+[tool.poe.tasks]
+[tool.poe.tasks.typecheck]
+help = "Run Python and Flutter typechecks"
+sequence = ["pyright-check", "flutter-pub-get", "flutter-analyze"]
+
+[tool.poe.tasks.pyright-check]
+help = "Run pyright on Python packages"
+cmd = "pyright nanobot_webchat client-telegram-bot"
+
+[tool.poe.tasks.flutter-analyze]
+help = "Run static analysis on the Flutter client"
+cmd = "flutter analyze"
+cwd = "client-web-flutter"
+
+[tool.poe.tasks.flutter-pub-get]
+help = "Resolve Flutter dependencies for analysis"
+cmd = "flutter pub get"
+cwd = "client-web-flutter"
+
+[tool.pyright]
+include = [
+    "nanobot_webchat",
+    "client-telegram-bot",
+]
+exclude = [
+    "**/__pycache__",
+    "**/.*",
+]
+typeCheckingMode = "standard"

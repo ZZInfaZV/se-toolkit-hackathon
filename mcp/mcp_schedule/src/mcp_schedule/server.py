@@ -216,17 +216,19 @@ def create_server() -> Server:
 def main():
     """Run the MCP server."""
     server = create_server()
-    # Auto-sync on startup (best-effort)
+    # Auto-sync on startup (best-effort) — log to stderr to not break stdio JSON
     try:
         sheet_url = os.environ.get("SCHEDULE_SHEET_URL")
         if sheet_url:
             db_conn = database.init_db()
             result = sync.sync_from_sheet(sheet_url, db_conn)
-            print(f"[schedule-mcp] Startup sync: {result['status']} — {result.get('inserted', 0)} lessons", flush=True)
+            import sys
+            print(f"[schedule-mcp] Startup sync: {result['status']} — {result.get('inserted', 0)} lessons", file=sys.stderr, flush=True)
         else:
-            print("[schedule-mcp] SCHEDULE_SHEET_URL not set, skipping startup sync", flush=True)
+            print("[schedule-mcp] SCHEDULE_SHEET_URL not set, skipping startup sync", file=sys.stderr, flush=True)
     except Exception as e:
-        print(f"[schedule-mcp] Startup sync failed: {e}", flush=True)
+        import sys
+        print(f"[schedule-mcp] Startup sync failed: {e}", file=sys.stderr, flush=True)
 
     import asyncio
     from mcp.server.stdio import stdio_server

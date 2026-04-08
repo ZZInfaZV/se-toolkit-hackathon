@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расписание</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f2f5;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .header h1 { font-size: 1.5rem; font-weight: 600; }
+        .header p { font-size: 0.85rem; opacity: 0.85; margin-top: 0.25rem; }
+        .container {
+            max-width: 800px;
+            margin: 1rem auto;
+            padding: 0 1rem;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+        .form-row {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+        .form-group {
+            flex: 1;
+            min-width: 140px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 0.35rem;
+        }
+        select, button {
+            width: 100%;
+            padding: 0.65rem 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background: #fff;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            padding-right: 2rem;
+        }
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            min-width: 120px;
+        }
+        .btn:hover { opacity: 0.9; }
+        .btn-sm {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.85rem;
+            min-width: auto;
+            width: auto;
+        }
+        .btn-sync {
+            background: #10b981;
+        }
+        .btn-now {
+            background: #f59e0b;
+        }
+        .sync-status {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+        .sync-status.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        .sync-status.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        .now-banner {
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .now-banner h3 {
+            color: #92400e;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        .now-banner .now-subject {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #78350f;
+        }
+        .now-banner .now-details {
+            font-size: 0.9rem;
+            color: #92400e;
+            margin-top: 0.25rem;
+        }
+        .schedule-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        thead th {
+            background: #f8f9fa;
+            padding: 0.6rem 0.5rem;
+            text-align: left;
+            font-weight: 600;
+            color: #555;
+            border-bottom: 2px solid #e5e7eb;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        tbody td {
+            padding: 0.6rem 0.5rem;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: top;
+        }
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr:hover { background: #f9fafb; }
+        .day-header {
+            background: #eef2ff !important;
+        }
+        .day-header td {
+            font-weight: 700;
+            color: #4338ca;
+            padding: 0.5rem;
+            font-size: 0.95rem;
+        }
+        .time-cell {
+            white-space: nowrap;
+            font-weight: 500;
+            color: #666;
+        }
+        .room-badge {
+            display: inline-block;
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .teacher-name {
+            color: #555;
+            font-size: 0.85rem;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: #888;
+        }
+        .empty-state .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        .actions-bar {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        @media (max-width: 600px) {
+            .form-row { flex-direction: column; }
+            .form-group { min-width: 100%; }
+            table { font-size: 0.8rem; }
+            thead th, tbody td { padding: 0.4rem 0.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>📅 Расписание</h1>
+    <p>Выберите группу и день недели</p>
+</div>
+
+<div class="container">
+
+    {# Sync status messages #}
+    {% if sync_status %}
+    <div class="sync-status {{ 'success' if sync_status.status == 'synced' else 'error' }}">
+        {% if sync_status.status == 'synced' %}
+            ✅ Синхронизировано: удалено {{ sync_status.deleted }}, добавлено {{ sync_status.inserted }} записей
+        {% elif sync_status.status == 'no_data' %}
+            ⚠️ {{ sync_status.message }}
+        {% else %}
+            ❌ Ошибка: {{ sync_status.message }}
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {# Current lesson banner #}
+    {% if mode == 'now' %}
+        {% if now_lesson %}
+        <div class="now-banner">
+            <h3>🔴 Сейчас идёт</h3>
+            <div class="now-subject">{{ now_lesson.subject }}</div>
+            <div class="now-details">
+                ⏰ {{ now_lesson.time_start }} — {{ now_lesson.time_end }}
+                {% if now_lesson.room %} | 📍 {{ now_lesson.room }}{% endif %}
+                {% if now_lesson.teacher %} | 👤 {{ now_lesson.teacher }}{% endif %}
+            </div>
+        </div>
+        {% else %}
+        <div class="now-banner">
+            <h3>✅ Сейчас занятий нет</h3>
+        </div>
+        {% endif %}
+    {% endif %}
+
+    {# Main form #}
+    <div class="card">
+        <form method="post" action="/schedule" id="schedule-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="group">Группа</label>
+                    <select name="group" id="group">
+                        {% for g in groups %}
+                        <option value="{{ g.key }}" {% if selected_group == g.key %}selected{% endif %}>{{ g.label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="day">День</label>
+                    <select name="day" id="day">
+                        <option value="">— Выберите день —</option>
+                        {% for d in days %}
+                        <option value="{{ d.key }}" {% if selected_day == d.key %}selected{% endif %}>{{ d.label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <input type="hidden" name="mode" id="mode" value="{{ mode }}">
+                <div class="form-group" style="flex: 0; min-width: auto;">
+                    <label>&nbsp;</label>
+                    <button type="submit" class="btn" id="submit-btn">Показать</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    {# Action buttons #}
+    <div class="actions-bar">
+        <form method="post" action="/schedule" style="display:inline;">
+            <input type="hidden" name="group" value="{{ selected_group or 'b25-cse-05' }}">
+            <input type="hidden" name="mode" value="now">
+            <button type="submit" class="btn btn-sm btn-now">🔴 Что сейчас?</button>
+        </form>
+        <form method="post" action="/schedule" style="display:inline;">
+            <input type="hidden" name="group" value="{{ selected_group or 'b25-cse-05' }}">
+            <input type="hidden" name="mode" value="week">
+            <button type="submit" class="btn btn-sm">📅 Вся неделя</button>
+        </form>
+        <form method="post" action="/sync" style="display:inline;">
+            <input type="hidden" name="group" value="{{ selected_group or 'b25-cse-05' }}">
+            <button type="submit" class="btn btn-sm btn-sync">🔄 Синхронизировать</button>
+        </form>
+    </div>
+
+    {# Schedule results #}
+    {% if schedule is not none %}
+    <div class="card">
+        {% if mode == 'now' %}
+            <div class="schedule-title">🔴 Текущее занятие</div>
+        {% elif mode == 'week' %}
+            <div class="schedule-title">📅 Расписание на неделю — {{ group_label }}</div>
+        {% elif selected_day %}
+            <div class="schedule-title">📅 {{ day_label }} — {{ group_label }}</div>
+        {% else %}
+            <div class="schedule-title">📅 Выберите день</div>
+        {% endif %}
+
+        {% if schedule %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Время</th>
+                    <th>Предмет</th>
+                    <th>Кабинет</th>
+                    <th>Преподаватель</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in schedule %}
+                    {% if item._is_header %}
+                    <tr class="day-header">
+                        <td colspan="4">{{ item._day_header }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td class="time-cell">{{ item.time_start }} — {{ item.time_end }}</td>
+                        <td>{{ item.subject }}</td>
+                        <td>{% if item.room %}<span class="room-badge">{{ item.room }}</span>{% else %}—{% endif %}</td>
+                        <td><span class="teacher-name">{{ item.teacher or '—' }}</span></td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            <div class="icon">📭</div>
+            <p>Нет занятий</p>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+    // Main form: always submit with mode=day (reset after "Что сейчас?")
+    document.getElementById('schedule-form').addEventListener('submit', function(e) {
+        document.getElementById('mode').value = 'day';
+        const btn = document.getElementById('submit-btn');
+        btn.disabled = true;
+        btn.textContent = 'Загрузка...';
+    });
+
+    // Action buttons
+    document.querySelectorAll('.actions-bar form').forEach(function(form) {
+        form.addEventListener('submit', function() {
+            const btn = form.querySelector('button');
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = 'Загрузка...';
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

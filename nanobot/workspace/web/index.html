@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Bot Chat</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; height: 100vh; display: flex; flex-direction: column; }
+        .header { background: #075e54; color: white; padding: 16px; text-align: center; font-size: 18px; font-weight: 600; }
+        .chat-container { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+        .message { max-width: 70%; padding: 10px 14px; border-radius: 12px; word-wrap: break-word; line-height: 1.4; }
+        .message.user { align-self: flex-end; background: #dcf8c6; border-bottom-right-radius: 4px; }
+        .message.bot { align-self: flex-start; background: white; border-bottom-left-radius: 4px; }
+        .message.error { align-self: center; background: #ffebee; color: #c62828; }
+        .input-container { display: flex; gap: 8px; padding: 12px; background: white; border-top: 1px solid #ddd; }
+        #message-input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 24px; font-size: 16px; outline: none; }
+        #message-input:focus { border-color: #075e54; }
+        #send-btn { padding: 12px 24px; background: #075e54; color: white; border: none; border-radius: 24px; cursor: pointer; font-size: 16px; }
+        #send-btn:hover { background: #064e45; }
+        #send-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .status { text-align: center; padding: 8px; font-size: 12px; color: #666; }
+        .status.connected { color: #2e7d32; }
+        .status.disconnected { color: #c62828; }
+    </style>
+</head>
+<body>
+    <div class="header">📅 Schedule Bot</div>
+    <div id="status" class="status disconnected">Отключение...</div>
+    <div id="chat" class="chat-container"></div>
+    <div class="input-container">
+        <input type="text" id="message-input" placeholder="Введите сообщение..." autocomplete="off">
+        <button id="send-btn">Отправить</button>
+    </div>
+    <script>
+        const ACCESS_KEY = 'schedule-bot-secret-key';
+        const WS_PORT = '8765';
+        const WS_URL = `ws://${window.location.hostname}:${WS_PORT}/?access_key=${ACCESS_KEY}`;
+        
+        const chat = document.getElementById('chat');
+        const input = document.getElementById('message-input');
+        const sendBtn = document.getElementById('send-btn');
+        const status = document.getElementById('status');
+        let ws = null;
+
+        function addMessage(content, type) {
+            const div = document.createElement('div');
+            div.className = `message ${type}`;
+            div.textContent = content;
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function connect() {
+            ws = new WebSocket(WS_URL);
+            
+            ws.onopen = () => {
+                status.textContent = 'Подключено';
+                status.className = 'status connected';
+                sendBtn.disabled = false;
+                input.focus();
+            };
+
+            ws.onclose = () => {
+                status.textContent = 'Отключено. Переподключение через 3 сек...';
+                status.className = 'status disconnected';
+                sendBtn.disabled = true;
+                setTimeout(connect, 3000);
+            };
+
+            ws.onerror = () => {
+                status.textContent = 'Ошибка подключения';
+                status.className = 'status disconnected';
+            };
+
+            ws.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data.content) {
+                        addMessage(data.content, 'bot');
+                    }
+                } catch {
+                    addMessage(event.data, 'bot');
+                }
+            };
+        }
+
+        function sendMessage() {
+            const content = input.value.trim();
+            if (!content || !ws || ws.readyState !== WebSocket.OPEN) return;
+            
+            addMessage(content, 'user');
+            ws.send(JSON.stringify({ content }));
+            input.value = '';
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        connect();
+    </script>
+</body>
+</html>

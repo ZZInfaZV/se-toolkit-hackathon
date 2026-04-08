@@ -28,3 +28,9 @@ data/*.db
 # OS
 .DS_Store
 Thumbs.db
+
+# Qwen
+.qwen/
+
+# Junk files
+=3.11

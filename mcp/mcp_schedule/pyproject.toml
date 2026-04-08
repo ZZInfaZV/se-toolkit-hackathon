@@ -5,7 +5,6 @@ description = "MCP server for schedule data from Google Sheets"
 requires-python = ">=3.11"
 dependencies = [
     "mcp>=1.0.0",
-    "gspread>=6.0.0",
 ]
 
 [build-system]

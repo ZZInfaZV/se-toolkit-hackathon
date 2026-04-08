@@ -1,21 +1,28 @@
 services:
-  schedule-bot:
+  schedule-web:
     build:
       context: .
-      dockerfile: nanobot/Dockerfile
-    container_name: schedule-bot
+      dockerfile: webapp/Dockerfile
+    container_name: schedule-web
     restart: unless-stopped
     env_file:
       - .env
     environment:
-      - LLM_API_KEY=${LLM_API_KEY}
-      - LLM_API_BASE=${LLM_API_BASE}
       - SCHEDULE_DB_PATH=/app/data/schedule.db
       - SCHEDULE_SHEET_URL=${SCHEDULE_SHEET_URL}
     volumes:
       - schedule-data:/app/data
     ports:
-      - "8765:8765"
+      - "8080:8080"
+    networks:
+      - default
+      - lms-network
 
 volumes:
   schedule-data:
+
+networks:
+  default:
+    driver: bridge
+  lms-network:
+    external: true
