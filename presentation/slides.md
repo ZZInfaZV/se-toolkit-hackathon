@@ -60,25 +60,20 @@ CSE-05
 |---|---|
 | **End Users** | Students and faculty of Sirius University |
 | **Problem** | Schedule in Google Sheets — inconvenient on phone, no quick search, hard to find a room or instructor |
-| **Idea** | Schedule in one tap + AI bot that answers questions in natural language |
+| **Idea** | Schedule in one tap + Web bot that answers questions about schedule |
 
 ---
 
 ## Implementation
 
 **How it was built:**
-FastAPI web UI + Nanobot AI agent + MCP server + sync from Google Sheets → cache in SQLite
+FastAPI web UI + sync from Google Sheets → cache in SQLite
 
 | Version 1 | Version 2 |
 |---|---|
-| LLM bot with natural language queries | "Whole week" button — bug fix (DAYS iteration) |
-| Basic web chat | Fixed Google Sheets URL (typo in ID) |
-| MCP server with 6 tools | Standalone web UI without LLM |
-| Auto-sync from Sheets | README + MIT License |
-
-**Feedback addressed:**
-- "Whole week" showed "No classes" → **fixed**
-- "What now?" showed incorrect information → **fixed**
+| Schedule bot with queries | "Whole week" button — (DAYS iteration) |
+| Button "What's now?" | Button "What's now shows current schedule for chosen group" |
+| No sync button | Added new buttton "Sync" that synchronize data with actual schedule in Google Sheet |
 
 ---
 
@@ -88,7 +83,9 @@ FastAPI web UI + Nanobot AI agent + MCP server + sync from Google Sheets → cac
 
 ### 🎬 Video Demonstration of Version 2
 
-*[Insert recorded video (up to 2 min with voice)]*
+<video controls width="100%" style="max-width: 800px;">
+  <source src="video/video1.mp4" type="video/mp4">
+</video>
 
 </div>
 

@@ -4,14 +4,9 @@ AI-powered schedule assistant with a web UI and natural-language chatbot — ans
 
 ## Demo
 
-> **Screenshot 1:** Main page — group & day selector with action buttons  
-> *[Insert screenshot of http://host:8080]*
-
-> **Screenshot 2:** Full week schedule
-> *[Insert screenshot of "Full week" view]*
-
-> **Screenshot 3:** AI chatbot answering schedule questions  
-> *[Insert screenshot of nanobot webchat]*
+![Screenshot 1](screenshots/sc1.png)
+![Screenshot 2](screenshots/sc2.png)
+![Screenshot 3](screenshots/sc3.png)
 
 ## Context
 
@@ -38,8 +33,6 @@ A single interface that:
 | **Day schedule** | Select group + day → see all lessons with time, room, teacher |
 | **Week schedule** | Full Mon–Sat view with day headers |
 | **"What's now?"** | Highlights the current lesson based on system time |
-| **Room lookup** | Find classroom by subject name |
-| **Teacher lookup** | Find teacher by subject name |
 | **Auto-sync** | Fetches latest data from Google Sheets on startup |
 | **Manual sync** | Refresh data via button |
 | **Offline resilience** | Works with cached SQLite data when Sheets is unreachable |
@@ -65,13 +58,6 @@ Open `http://<host>:8080` in any browser:
 2. Pick a day or press **"Full week"** for the full week
 3. Press **"What's now?"** to see the current lesson
 4. Press **"Sync"** to fetch the latest data from Google Sheets
-
-### AI Chatbot
-
-Open the nanobot webchat at `http://<host>:8765` and ask in natural language:
-- "What's now?" / "What do I have now?"
-- "Where is Math?" / "Where is math?"
-- "Schedule for Friday" / "Schedule for Friday"
 
 ## Deployment
 
@@ -142,7 +128,6 @@ uv run nanobot gateway
 | Component | Port | Description |
 |-----------|------|-------------|
 | **webapp** | 8080 | FastAPI standalone schedule viewer |
-| **nanobot** | 8765 | AI agent with WebSocket chat channel |
 | **Schedule MCP** | — | 6 tools: `get_now`, `get_schedule`, `get_week`, `get_room`, `get_teacher`, `sync_schedule` |
 | **SQLite** | — | Local cache (`data/schedule.db`) |
 
