@@ -21,8 +21,7 @@ Timetables are stored in Google Sheets — inconvenient to navigate on mobile, n
 ### Solution
 
 A single interface that:
-- Shows daily / weekly schedule in a mobile-friendly layout with one tap
-- An AI chatbot that answers natural-language questions like "Where is math?", "What's my next class?", "Who teaches algorithms?"
+- Shows daily / weekly schedule in a mobile-friendly layout with one tap using web application
 
 ## Features
 
