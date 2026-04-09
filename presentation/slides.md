@@ -76,10 +76,6 @@ FastAPI web UI + Nanobot AI-агент + MCP-сервер + синхрониза
 | MCP-сервер с 6 инструментами | Standalone web UI без LLM |
 | Авто-синк из Sheets | README + MIT License |
 
-**Фидбэк учтён:**
-- «Вся неделя» показывала «Нет занятий» → **исправлено**
-- «Что сейчас?» показывало неверную информацию → **исправлено**
-
 ---
 
 ## Демонстрация
@@ -106,7 +102,7 @@ FastAPI web UI + Nanobot AI-агент + MCP-сервер + синхрониза
 
 `https://github.com/ZZInfaZV/schedule-bot`
 
-![QR: GitHub](https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://github.com/ZZInfaZV/schedule-bot)
+![QR: GitHub](https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://github.com/ZZInfaZV/se-toolkit-hackathon)
 
 </div>
 
