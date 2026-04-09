@@ -127,6 +127,24 @@ async def show_schedule(
         schedule = None
         if now_lesson:
             schedule = [now_lesson]
+        # Find the next lesson for this group today
+        from datetime import datetime
+        import zoneinfo
+        msk = zoneinfo.ZoneInfo("Europe/Moscow")
+        now_msk = datetime.now(msk)
+        current_minutes = now_msk.hour * 60 + now_msk.minute
+        day_map = {
+            0: "Пн", 1: "Вт", 2: "Ср", 3: "Чт", 4: "Пт", 5: "Сб", 6: "Вс"
+        }
+        today_ru = day_map.get(now_msk.weekday(), "")
+        all_today = get_schedule(conn, today_ru, group)
+        next_lesson = None
+        for l in all_today:
+            sh, sm = map(int, l["time_start"].split(":"))
+            start_min = sh * 60 + sm
+            if start_min > current_minutes:
+                next_lesson = l
+                break
         context = {
             "request": request,
             "groups": GROUPS,
@@ -137,6 +155,7 @@ async def show_schedule(
             "mode": "now",
             "sync_status": sync_status,
             "now_lesson": now_lesson,
+            "next_lesson": next_lesson,
         }
         return Response(content=render_template("index.html", context), media_type="text/html")
 

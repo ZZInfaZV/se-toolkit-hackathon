@@ -294,7 +294,7 @@
     </div>
 
     {# Schedule results #}
-    {% if schedule is not none %}
+    {% if schedule is not none or mode == 'now' %}
     <div class="card">
         {% if mode == 'now' %}
             <div class="schedule-title">🔴 Текущее занятие</div>
@@ -324,7 +324,7 @@
                     </tr>
                     {% else %}
                     <tr>
-                        <td class="time-cell">{{ item.time_start }} — {{ item.time_end }}</td>
+                        <td class="time-cell">{{ item.time_start }} — {{ item.end_time or item.time_end }}</td>
                         <td>{{ item.subject }}</td>
                         <td>{% if item.room %}<span class="room-badge">{{ item.room }}</span>{% else %}—{% endif %}</td>
                         <td><span class="teacher-name">{{ item.teacher or '—' }}</span></td>
@@ -333,10 +333,21 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% elif next_lesson %}
+        <div class="empty-state">
+            <div class="icon">☕</div>
+            <p>Сейчас перерыв. Следующее занятие:</p>
+            <div style="margin-top: 12px; font-size: 1.1rem;">
+                <strong>{{ next_lesson.time_start }} — {{ next_lesson.time_end }}</strong><br>
+                {{ next_lesson.subject }}<br>
+                {% if next_lesson.room %}Кабинет: {{ next_lesson.room }}{% endif %}
+                {% if next_lesson.teacher %} | {{ next_lesson.teacher }}{% endif %}
+            </div>
+        </div>
         {% else %}
         <div class="empty-state">
-            <div class="icon">📭</div>
-            <p>Нет занятий</p>
+            <div class="icon">😴</div>
+            <p>Сегодня больше занятий нет</p>
         </div>
         {% endif %}
     </div>
