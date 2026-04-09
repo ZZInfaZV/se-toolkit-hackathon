@@ -186,7 +186,7 @@ h2 {
 </tr>
 <tr>
 <td><strong>Idea</strong></td>
-<td>Schedule in one tap + AI bot that answers questions in natural language</td>
+<td>Schedule in one tap using one web bot application</td>
 </tr>
 </tbody>
 </table>
@@ -270,7 +270,7 @@ h2 {
 ;" data-marpit-pagination-total="5" data-size="16:9">
 <h2 id="%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5">Implementation</h2>
 <p><strong>How it was built:</strong><br />
-FastAPI web UI + Nanobot AI agent + MCP server + sync from Google Sheets → cache in SQLite</p>
+Web UI + sync from Google Sheets → cache in SQLite</p>
 <table>
 <thead>
 <tr>
@@ -280,24 +280,21 @@ FastAPI web UI + Nanobot AI agent + MCP server + sync from Google Sheets → cac
 </thead>
 <tbody>
 <tr>
-<td>LLM bot with natural language queries</td>
-<td>"Whole week" button — bug fix (DAYS iteration)</td>
+<td>Schedule bot with queries</td>
+<td>Schedule bot with button for quick schedule information</td>
 </tr>
 <tr>
-<td>Basic web chat</td>
-<td>Fixed Google Sheets URL (typo in ID)</td>
+<td>Button "What's now?"</td>
+<td>Fixed Google Sheets URL (typo in ID)Button "What's now?" shows current schedule for chosen group</td>
 </tr>
 <tr>
-<td>MCP server with 6 tools</td>
-<td>Standalone web UI without LLM</td>
-</tr>
-<tr>
-<td>Auto-sync from Sheets</td>
-<td>README + MIT License</td>
+<td>No sync button</td>
+<td>Added new buttton "Sync" that synchronize data with actual schedule in Google Sheet</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Feedback addressed:</strong></p>
+<p><strong>Schedule data stored in local database, this helps when Google schedule is unavailable.</strong></p>
 <ul>
 </ul>
 </section>
