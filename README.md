@@ -67,15 +67,14 @@ Ubuntu 24.04 (compatible with university VM images)
 ### Prerequisites
 
 - Docker & Docker Compose
-- An OpenAI-compatible LLM API endpoint (for chatbot only — Ollama, vLLM, OpenAI, etc.)
 - Google Sheet URL with public schedule (read-only)
 
 ### Step-by-Step
 
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/ZZInfaZV/schedule-bot.git
-   cd schedule-bot
+   git clone https://github.com/ZZInfaZV/se-toolkit-hackathon.git
+   cd se-toolkit-hackathon
    ```
 
 2. **Configure environment:**
@@ -85,7 +84,6 @@ Ubuntu 24.04 (compatible with university VM images)
    ```
    Edit the following:
    - `LLM_API_BASE` — your LLM endpoint (e.g. `http://localhost:11434/v1`)
-   - `LLM_API_KEY` — API key (can be `unused` for local Ollama)
    - `SCHEDULE_SHEET_URL` — Google Sheets URL with the timetable
 
 3. **Start all services:**
@@ -95,7 +93,6 @@ Ubuntu 24.04 (compatible with university VM images)
 
 4. **Access the services:**
    - Web UI (schedule viewer): `http://<host>:8080`
-   - Web chat (AI bot): `http://<host>:8765`
 
 ### Manual (without Docker)
 
@@ -121,8 +118,6 @@ uv run nanobot gateway
 ```
 [Web UI :8080] ──┐
                  ├──→ [SQLite DB] ← sync ← [Google Sheets]
-[Nanobot Chat :8765] → [LLM API] → [Schedule MCP Server] ──┘
-```
 
 | Component | Port | Description |
 |-----------|------|-------------|
@@ -136,8 +131,6 @@ uv run nanobot gateway
 schedule-bot/
 ├── mcp/mcp_schedule/              # MCP server (tools + DB + sync)
 ├── webapp/                        # Standalone FastAPI web viewer
-├── nanobot/                       # AI agent config + Dockerfile
-├── nanobot-webchat/               # WebSocket chat channel plugin
 ├── data/                          # SQLite database (gitignored)
 ├── docker-compose.yml
 ├── .env.example
